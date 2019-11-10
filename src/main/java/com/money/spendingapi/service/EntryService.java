@@ -4,6 +4,7 @@ import com.money.spendingapi.model.Entry;
 import com.money.spendingapi.model.Person;
 import com.money.spendingapi.repository.EntryRepository;
 import com.money.spendingapi.repository.PersonRepository;
+import com.money.spendingapi.repository.filter.EntryFilter;
 import com.money.spendingapi.service.exception.InexistentOrInactivePersonException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,8 @@ public class EntryService {
     @Autowired
     private PersonRepository personRepository;
 
-    public List<Entry> list() {
-        return repository.findAll();
+    public List<Entry> filter(EntryFilter entryFilter) {
+        return repository.filter(entryFilter);
     }
 
     public Entry findByCode(Long code) {

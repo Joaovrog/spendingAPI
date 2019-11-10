@@ -3,6 +3,7 @@ package com.money.spendingapi.controller;
 
 import com.money.spendingapi.event.CreatedResourceEvent;
 import com.money.spendingapi.model.Category;
+import com.money.spendingapi.repository.filter.EntryFilter;
 import com.money.spendingapi.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

@@ -3,6 +3,7 @@ package com.money.spendingapi.controller;
 import com.money.spendingapi.event.CreatedResourceEvent;
 import com.money.spendingapi.exception.ValidationException;
 import com.money.spendingapi.model.Entry;
+import com.money.spendingapi.repository.filter.EntryFilter;
 import com.money.spendingapi.service.EntryService;
 import com.money.spendingapi.service.exception.InexistentOrInactivePersonException;
 import org.apache.coyote.Response;
@@ -34,8 +35,8 @@ public class EntryController {
 
 
     @GetMapping
-    public ResponseEntity<?> list() {
-        List<Entry> categories = service.list();
+    public ResponseEntity<?> search(EntryFilter entryFilter) {
+        List<Entry> categories = service.list(entryFilter);
         return ResponseEntity.ok(categories);
     }
 
