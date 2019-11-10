@@ -36,7 +36,7 @@ public class EntryController {
 
     @GetMapping
     public ResponseEntity<?> search(EntryFilter entryFilter) {
-        List<Entry> categories = service.list(entryFilter);
+        List<Entry> categories = service.filter(entryFilter);
         return ResponseEntity.ok(categories);
     }
 
