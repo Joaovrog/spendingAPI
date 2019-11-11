@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class EntryFilter {
 
-    private String desciption;
+    private String description;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate experyDateFrom;
@@ -14,12 +14,12 @@ public class EntryFilter {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate experyDateTo;
 
-    public String getDesciption() {
-        return desciption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
+    public void setDescription(String desciption) {
+        this.description = desciption;
     }
 
     public LocalDate getExperyDateFrom() {

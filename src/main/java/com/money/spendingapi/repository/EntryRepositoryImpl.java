@@ -30,22 +30,24 @@ public class EntryRepositoryImpl implements EntryRepositoryQuery {
         criteria.where(predicates);
 
         TypedQuery<Entry> query = manager.createQuery(criteria);
-        return null;
+        return query.getResultList();
     }
 
     private Predicate[] createConstraintsForFilter(EntryFilter entryFilter, CriteriaBuilder builder, Root<Entry> root) {
         List<Predicate> predicates = new ArrayList<>();
-        if (!StringUtils.isEmpty(entryFilter.getDesciption())) {
+        if (!StringUtils.isEmpty(entryFilter.getDescription())) {
             predicates.add(builder.like(
-                    builder.lower(root.get("description")), "%"+entryFilter.getDesciption().toLowerCase()+"%"));
+                    builder.lower(root.get("description")), "%"+entryFilter.getDescription().toLowerCase()+"%"));
         }
 
         if (entryFilter.getExperyDateFrom() != null) {
-
+            predicates.add(
+                    builder.greaterThanOrEqualTo(root.get("experyDate"), entryFilter.getExperyDateFrom()));
         }
 
         if(entryFilter.getExperyDateTo() != null) {
-
+            predicates.add(
+                    builder.lessThanOrEqualTo(root.get("experyDate"), entryFilter.getExperyDateTo()));
         }
 
         return predicates.toArray(new Predicate[ predicates.size() ]);
