@@ -7,6 +7,8 @@ import com.money.spendingapi.repository.PersonRepository;
 import com.money.spendingapi.repository.filter.EntryFilter;
 import com.money.spendingapi.service.exception.InexistentOrInactivePersonException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,8 +22,8 @@ public class EntryService {
     @Autowired
     private PersonRepository personRepository;
 
-    public List<Entry> filter(EntryFilter entryFilter) {
-        return repository.filter(entryFilter);
+    public Page<Entry> filter(EntryFilter entryFilter, Pageable pageable) {
+        return repository.filter(entryFilter, pageable);
     }
 
     public Entry findByCode(Long code) {
@@ -35,5 +37,9 @@ public class EntryService {
         }
 
         return repository.save(entry);
+    }
+
+    public void remove(Long code) {
+        repository.deleteById(code);
     }
 }

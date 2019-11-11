@@ -3,6 +3,9 @@ package com.money.spendingapi.repository;
 import com.money.spendingapi.model.Entry;
 import com.money.spendingapi.repository.filter.EntryFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -20,7 +23,7 @@ public class EntryRepositoryImpl implements EntryRepositoryQuery {
     private EntityManager manager;
 
     @Override
-    public List<Entry> filter(EntryFilter entryFilter) {
+    public Page<Entry> filter(EntryFilter entryFilter, Pageable pageable) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery<Entry> criteria = builder.createQuery(Entry.class);
         Root<Entry> root = criteria.from(Entry.class);
@@ -30,8 +33,13 @@ public class EntryRepositoryImpl implements EntryRepositoryQuery {
         criteria.where(predicates);
 
         TypedQuery<Entry> query = manager.createQuery(criteria);
-        return query.getResultList();
+        addPaginationConstraintsInQuery(query, pageable);
+
+        return new PageImpl<>(query.getResultList(), pageable, total(entryFilter));
     }
+
+
+
 
     private Predicate[] createConstraintsForFilter(EntryFilter entryFilter, CriteriaBuilder builder, Root<Entry> root) {
         List<Predicate> predicates = new ArrayList<>();
@@ -51,5 +59,28 @@ public class EntryRepositoryImpl implements EntryRepositoryQuery {
         }
 
         return predicates.toArray(new Predicate[ predicates.size() ]);
+    }
+
+
+    private void addPaginationConstraintsInQuery(TypedQuery<Entry> query, Pageable pageable) {
+        int currentPage = pageable.getPageNumber();
+        int totalRegistersPerPage = pageable.getPageSize();
+        int firstRegisterOfPage = currentPage * totalRegistersPerPage;
+
+        query.setFirstResult(firstRegisterOfPage);
+        query.setMaxResults(totalRegistersPerPage);
+
+    }
+
+    private Long total(EntryFilter entryFilter) {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root<Entry> root = criteria.from(Entry.class);
+
+        Predicate[] predicates = createConstraintsForFilter(entryFilter, builder, root);
+        criteria.where(predicates);
+        criteria.select(builder.count(root));
+ 
+        return manager.createQuery(criteria).getSingleResult();
     }
 }
