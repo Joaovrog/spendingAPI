@@ -80,7 +80,7 @@ public class EntryRepositoryImpl implements EntryRepositoryQuery {
         Predicate[] predicates = createConstraintsForFilter(entryFilter, builder, root);
         criteria.where(predicates);
         criteria.select(builder.count(root));
- 
+
         return manager.createQuery(criteria).getSingleResult();
     }
 }
