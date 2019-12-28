@@ -33,8 +33,9 @@ public class OAuthAuthorizationServerConfig extends AuthorizationServerConfigure
                 .withClient("angular")
                 .secret("{noop}@ngul@r0") // {noop} -> password encoder id for new password storage format
                 .scopes("read", "write")
-                .authorizedGrantTypes("password")    // the application (angular) receive user and pass and send to get access token | angular have access to user and pass (only in reliable structures)
-                .accessTokenValiditySeconds(1800);
+                .authorizedGrantTypes("password", "refresh_token")    // the application (angular) receive user and pass and send to get access token | angular have access to user and pass (only in reliable structures)
+                .accessTokenValiditySeconds(15)
+                .refreshTokenValiditySeconds(3600 * 24);
 
     }
 
@@ -44,6 +45,7 @@ public class OAuthAuthorizationServerConfig extends AuthorizationServerConfigure
         endpoints
                 .tokenStore(tokenStore())
                 .accessTokenConverter(accessTokenConverter())
+                .reuseRefreshTokens(false)
                 .authenticationManager(authenticationManager);
     }
 
