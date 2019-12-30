@@ -19,6 +19,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
+// PREFLIGHT HTTP METHOD: 'OPTIONS' -> uma request prévia à outra origem para verificar a autorização de execução ao verbo principal (GET, POST, ...)
+// allow requests in different origins ( browsers -> apply a security policy to JS requests to different domains )
+//@CrossOrigin(origins = "*")   -> não vai funcionar com OAuth2, então, faremos um filtro de CORS.
+
 public class CategoryController {
 
     @Autowired
